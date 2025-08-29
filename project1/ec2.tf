@@ -15,6 +15,8 @@ data "aws_ami" "al2023_latest" {
 
 }
 
+
+
 resource "aws_instance" "web" {
   ami                         = data.aws_ami.al2023_latest.id
   instance_type               = "t4g.small"
@@ -32,5 +34,23 @@ EOF
 
   tags = {
     Name = "main"
+  }
+}
+
+resource "aws_launch_template" "main" {
+  name_prefix   = "name"
+  image_id      = data.aws_ami.al2023_latest.id
+  instance_type = "t4g.small"
+}
+
+resource "aws_autoscaling_group" "main" {
+  availability_zones = ["eu-west-2a"]
+  desired_capacity   = 1
+  max_size           = 1
+  min_size           = 1
+
+  launch_template {
+    id      = aws_launch_template.main.id
+    version = "$Latest"
   }
 }
