@@ -17,30 +17,44 @@ data "aws_ami" "al2023_latest" {
 
 
 
-resource "aws_instance" "web" {
-  ami                         = data.aws_ami.al2023_latest.id
-  instance_type               = "t4g.small"
-  associate_public_ip_address = true
-  subnet_id                   = aws_subnet.main.id
+# resource "aws_instance" "web" {
+#   ami                         = data.aws_ami.al2023_latest.id
+#   instance_type               = "t4g.small"
+#   associate_public_ip_address = true
+#   subnet_id                   = aws_subnet.main.id
+#   vpc_security_group_ids      = [ aws_security_group.main.id ]
+#   user_data = <<EOF
+# #!/bin/bash
+
+# sudo yum upgrade -y
+# sudo yum install -y httpd
+# echo "Hello world!" > /var/www/html/index.html
+# sudo systemctl start httpd
+# EOF
+
+#   tags = {
+#     Name = "main"
+#   }
+# }
+
+resource "aws_launch_template" "main" {
+  name_prefix   = "name"
+  image_id      = data.aws_ami.al2023_latest.id
+  instance_type = "t4g.small"
   vpc_security_group_ids      = [ aws_security_group.main.id ]
-  user_data = <<EOF
+  user_data = base64encode(<<EOF
 #!/bin/bash
 
 sudo yum upgrade -y
 sudo yum install -y httpd
 echo "Hello world!" > /var/www/html/index.html
 sudo systemctl start httpd
-EOF
-
+EOF 
+  )
   tags = {
     Name = "main"
   }
-}
-
-resource "aws_launch_template" "main" {
-  name_prefix   = "name"
-  image_id      = data.aws_ami.al2023_latest.id
-  instance_type = "t4g.small"
+  
 }
 
 resource "aws_autoscaling_group" "main" {
