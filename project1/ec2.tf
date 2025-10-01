@@ -58,7 +58,7 @@ EOF
 }
 
 resource "aws_autoscaling_group" "main" {
-  availability_zones = ["eu-west-2a"]
+  vpc_zone_identifier = [aws_subnet.main.id]
   desired_capacity   = 1
   max_size           = 1
   min_size           = 1
