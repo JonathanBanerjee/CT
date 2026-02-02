@@ -42,8 +42,9 @@ EOF
 resource "aws_autoscaling_group" "main" {
   vpc_zone_identifier = [aws_subnet.main.id]
   desired_capacity   = 1
-  max_size           = 1
+  max_size           = 3
   min_size           = 1
+
 
   launch_template {
     id      = aws_launch_template.main.id
