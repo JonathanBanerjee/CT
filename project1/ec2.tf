@@ -15,8 +15,6 @@ data "aws_ami" "al2023_latest" {
 
 }
 
-
-
 resource "aws_launch_template" "main" {
   name_prefix   = "name"
   image_id      = data.aws_ami.al2023_latest.id
@@ -40,7 +38,7 @@ EOF
 }
 
 resource "aws_autoscaling_group" "main" {
-  vpc_zone_identifier = [aws_subnet.main.id]
+  vpc_zone_identifier = module.vpc.public_subnets
   desired_capacity   = 1
   max_size           = 3
   min_size           = 1

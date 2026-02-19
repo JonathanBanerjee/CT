@@ -1,7 +1,7 @@
 resource "aws_security_group" "main" {
   name        = "main"
   description = "Allow http inbound traffic and all outbound traffic"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = module.vpc.vpc_id
 
   ingress {
     from_port   = 80
