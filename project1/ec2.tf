@@ -33,7 +33,7 @@ EOF
   }
    network_interfaces {
     associate_public_ip_address = true
-    security_groups = [ aws_security_group.main.id ]
+security_groups = [ module.web_server_sg.security_group_id ]
   }
 }
 
