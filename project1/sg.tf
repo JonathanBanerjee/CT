@@ -29,12 +29,12 @@ module "web_server_sg" {
   source = "terraform-aws-modules/security-group/aws"
   description = "Allow http inbound traffic and all outbound traffic"
 
-//Ingress rule as a module
+//Ingress rules control what traffic is allowed to the instances
 ingress_cidr_blocks = ["0.0.0.0/0"]
 ingress_rules = ["http-80-tcp"]
 
 
-//Egress rule as a module
+//Egress rules control the traffic that instances are able to send out. 
 egress_rules = ["all-all"]
 
 tags = {
